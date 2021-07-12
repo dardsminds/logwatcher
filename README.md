@@ -89,7 +89,7 @@ node -v
 ```
 ## How to use
 
-Assume you already run the logwatcher on the server, open the logwatcher index.html file on web browser, make sure to edit websocket address specified on the script portion, it will show the status as connected to server.
+Assume you already run the logwatcher on the server, open the logwatcher index.html file on web browser, make sure to edit websocket address specified on the script portion, it will show the status as connection established.
 
 Now on your actual project file you can use the regular error_log method to output the error on the log file, any update on the log file will automatically display on the logwatcher index.html file.
 
