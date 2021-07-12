@@ -16,6 +16,7 @@ npm install --save-optional utf-8-validate@^5.0.2
 npm install tail
 ```
 4. this utility runs on port 3000 but you may specify your own desired port, so lets define an apache conf vhost file to proxy pass the utility on default port 80 from local port 3000. Create a configuration file websocket.conf at /etc/httpd/vhost.d/
+
 *websocket.conf*
 ```
 <VirtualHost	*:80>
@@ -41,6 +42,7 @@ ln -s ../../logwatcher/index.html index.html
 ```
 
 6. Go to the main file of logwatcher and edit the server.js and change the logfile variable value and specify the path of your log file
+
 *server.js*
 ```
 var WebSocketServer = require("ws").Server;
