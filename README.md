@@ -15,5 +15,37 @@ npm install --save-optional bufferutil
 npm install --save-optional utf-8-validate@^5.0.2
 npm install tail
 ```
+4. this utility runs on port 3000 but you may specify your own desired port, so lets define an apache conf vhost file to proxy pass the utility on default port 80 from local port 3000. Create a configuration file websocket.conf at /etc/httpd/vhost.d/
+*websocket.conf*
+```
+<VirtualHost	*:80>
+	ServerName websocket.domain.com
 
+	RewriteEngine on
+	RewriteCond ${HTTP:Upgrade} websocket [NC]
+	RewriteCond ${HTTP:Connection} upgrade [NC]
+	RewriteRule .* "ws://localhost:3000/$1" [P,L]
 
+        ProxyPass /  ws://localhost:3000/
+        ProxyPassReverse /  ws://localhost:3000/
+
+	ProxyRequests off
+</VirtualHost>
+```
+note: just put your exact domain name on the ServerName option
+
+5. For the logwatcher index.html file you can either create a virtual host for that or create a folder on your existing site and just make a soft link to it, assuming your public file is located in /public_html  then create a folder logwatcher on it then go inside that newly created folder logwatcher and make a system link file
+
+```
+ln -s ../../logwatcher/index.html index.html
+```
+
+6. Go to the main file of logwatcher and edit the server.js and change the logfile variable value and specify the path of your log file
+*server.js*
+```
+var WebSocketServer = require("ws").Server;
+var wsServer = new WebSocketServer({port:3000});
+
+var logfile = "/var/log/httpd/error-log.log";
+...
+```
