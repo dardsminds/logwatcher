@@ -1,8 +1,10 @@
 var WebSocketServer = require("ws").Server;
 var wsServer = new WebSocketServer({port:3000});
- 
+
+var logfile = "/var/log/httpd/catalyst-error.log";
+
 Tail = require('tail').Tail;
-tail = new Tail("/var/log/httpd/catalyst-error.log");
+tail = new Tail(logfile);
 
 var dataBuffer;
 
@@ -25,7 +27,7 @@ wsServer.on("connection", function (ws) {
     });
 
 	tail.on("error", function(error) {
-		
+
 		console.log('ERROR: ', error);
 	});
 });
