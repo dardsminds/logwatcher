@@ -51,3 +51,36 @@ var wsServer = new WebSocketServer({port:3000});
 var logfile = "/var/log/httpd/error-log.log";
 ...
 ```
+
+## Run the utility
+This logwatcher can only be run by root user so you need to be a root user by using a command 
+```
+sudo su root
+```
+Go inside the logwatcher folder and run the logwatcher by using the command below
+```
+node server.js
+```
+
+Note: If you got a token error when running node server.js that probably you are using old version of node you may refer the process on upgrading your node here below:
+
+This will instal nvm
+```
+wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
+```
+
+After installtion just check if nvm is properly installed by using command,
+```
+command -v nvm
+```
+if the output show nvm then installation was successful
+
+finally install later version of Node
+```
+nvm install node
+```
+
+And check version
+```
+node -v
+```
