@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <title>WebSocket LogWatcher</title>
+  <style>
+	html,
+	body {
+	height: 100%;
+	}	  
+	div.code {
+		white-space: pre;
+		font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+		font-size: 12px;
+		color: #c7dfff;
+		background-color: rgb(49, 49, 49);
+		padding:5px;
+		height: 100%;
+		overflow-y: scroll;
+	}
+	.error {
+		color:red;
+	}  
+	.success {
+		color:green;
+	}
+  </style>
+
+   <script type="text/javascript">
+
+	var ws;
+
+   function ws_connect() {
+		ws = new WebSocket("ws://websocket.dealereprocess.com");
+
+		ws.onopen = function() {
+			document.getElementById("ws_server_status").innerHTML = "<span class='success'>Connection established</span>";
+		};		
+
+		ws.onmessage = function(event) {
+			let logdata = event.data;
+			let logformat = extract_log_details(logdata);
+			let formated_data = n2br(logformat);
+			let logplaceholder = document.getElementById("server_messages");
+			
+			logplaceholder.insertAdjacentHTML('beforeend', formated_data);
+		}
+
+		ws.onerror = function(event) {
+			console.log("Server err:", event.data);
+			ws.close();
+		}
+		
+		ws.onclose = function(e) {  
+			document.getElementById("ws_server_status").innerHTML = "<span class='error'>disconnected to server, reconnecting...</span>";
+			setTimeout(function() {
+				ws_connect();
+			}, 1000);			
+		}	
+
+	}
+
+
+    function extract_log_details(data) {
+        var arr = data.match(/\[client(.*)\](.*)/); // get data starting from [client **]
+		if (!arr) return data;
+
+		let arr1 = arr[0].split(']'); // slice data using ] character
+		let log_details = arr1[1]; // get the second group data
+
+		let string_index = data.indexOf(log_details); // find the index of data after [client ***]
+        return data.substring(string_index);
+    }  	
+
+	function n2br(data){
+		const regex = /\\n|\\r\\n|\\n\\r|\\r/g;
+		return data.replace(regex, '<br>')
+	}
+
+    function clear_data() {
+		document.getElementById("server_messages").innerHTML="";
+    }
+
+	function reload_data() {
+		if (ws) {
+			ws.send("reload");
+		}	
+    }	
+
+	// initiate connection
+	ws_connect();
+   </script>
+ </head>
+ <body>
+  <button onClick="reload_data()">Reload</button>
+  <button onClick="clear_data()">Clear</button>	
+  <div id="ws_server_status"></div>
+  <div id="server_messages" class="language-java code"></div> 
+ </body>
+</html>

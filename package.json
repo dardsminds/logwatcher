@@ -1,0 +1,16 @@
+{
+  "name": "LogWatcher",
+  "version": "1.0.0",
+  "description": "A small web utility to display your selected log file on the website in real time using websocket and NodeJs",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Dario Mindoro",
+  "license": "ISC",
+  "optionalDependencies": {
+    "bufferutil": "^4.0.3",
+    "utf-8-validate": "^5.0.5"
+  }
+}
