@@ -90,6 +90,18 @@ And check version
 ```
 node -v
 ```
+## Running logwatcher in background
+For some reason you like to run logwatcher on the background so you don't require to have a separate terminal connection for root user and start logwatcher, or it continue run even you disconnected on terminal so you may use PM2, check here below how to use it.
+
+1. Install PM2 (you need to switch to root user mode)
+```
+npm install pm2 -g
+```
+2. Run logwatcher using pm2
+```
+pm2 start node server.js
+```
+
 ## How to use
 
 Assume you already run the logwatcher on the server, open the logwatcher index.html file on web browser, make sure to edit websocket address specified on the script portion, it will show the status as connection established.
