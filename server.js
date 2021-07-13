@@ -7,7 +7,7 @@ var logfile = config.logfile;
 
 Tail = require('tail').Tail;
 tail = new Tail(logfile);
-console.log(config.logfile);
+
 var dataBuffer;
 
 wsServer.on("connection", function (ws) {
