@@ -19,6 +19,7 @@ wsServer.on("connection", function (ws) {
 		if (msg == "reload") {
 			ws.send(dataBuffer);
 		}
+		ws.send("Echo message");
     });
 
     tail.on("line", function(data) {
