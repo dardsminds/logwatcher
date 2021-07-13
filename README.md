@@ -99,4 +99,4 @@ error_log(print_r($object, true));
 ```
 
 ## Improve this app
-Anybody can contribute to enhance this utility for more feature, feel free to clone and create a branch to merge on master.
+Everyone is invited to contribute and enhance this utility for more feature, feel free to clone and create a branch to merge on master.
