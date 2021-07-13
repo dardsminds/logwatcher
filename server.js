@@ -13,7 +13,6 @@ wsServer.on("connection", function (ws) {
     console.log("Connection established!");
     ws.on("message", function (msg) {
 
-        ws.send("Got your message!");
         console.log("Received:", msg);
 		if (msg == "reload") {
 			ws.send(dataBuffer);
