@@ -65,6 +65,8 @@ Go inside the logwatcher folder and run the logwatcher by using the command belo
 node server.js
 ```
 
+## Updating your node to latest version (Optional)
+
 Note: If you got a token error when running node server.js that probably you are using old version of node you may refer the process on upgrading your node here below:
 
 This will instal nvm
