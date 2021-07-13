@@ -113,5 +113,5 @@ logger usage:
 error_log(print_r($object, true));
 ```
 
-## Improve this app
-Everyone is invited to contribute and enhance this utility for more feature, feel free to clone and create a branch to merge on master.
+## Improve this App
+I created this utility App for its very basic purpose but its functionality can be extend, user-interface can be improve, everyone is invited to contribute and enhance this utility for more feature, feel free to clone and create a branch to merge on master.
