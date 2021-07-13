@@ -62,7 +62,7 @@ sudo su root
 ```
 Go inside the logwatcher folder and run the logwatcher by using the command below
 ```
-node server.js
+node server
 ```
 
 ## Updating your node to latest version (Optional)
