@@ -59,27 +59,30 @@
 
 	}
 
-
+	// this will remove some log details like timestamp, server ip etc. and just get the log content only
     function extract_log_details(data) {
-        var arr = data.match(/\[client(.*)\](.*)/); // get data starting from [client **]
+        let arr = data.match(/\[client(.*)\](.*)/); 
 		if (!arr) return data;
 
-		let arr1 = arr[0].split(']'); // slice data using ] character
-		let log_details = arr1[1]; // get the second group data
+		let arr1 = arr[0].split(']'); 
+		let log_details = arr1[1]; 
 
-		let string_index = data.indexOf(log_details); // find the index of data after [client ***]
+		let string_index = data.indexOf(log_details); 
         return data.substring(string_index);
     }  	
 
+	// convert all newline character to <br>
 	function n2br(data){
 		const regex = /\\n|\\r\\n|\\n\\r|\\r/g;
 		return data.replace(regex, '<br>')
 	}
 
+	// clear status display
     function clear_data() {
 		document.getElementById("server_messages").innerHTML="";
     }
 
+	// reload the recent log data
 	function reload_data() {
 		if (ws) {
 			ws.send("reload");
