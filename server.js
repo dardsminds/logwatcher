@@ -1,11 +1,13 @@
-var WebSocketServer = require("ws").Server;
-var wsServer = new WebSocketServer({port:3000});
+var config = require("./config")();
 
-var logfile = "/var/log/httpd/catalyst-error.log";
+var WebSocketServer = require("ws").Server;
+var wsServer = new WebSocketServer({port:config.port});
+
+var logfile = config.logfile;
 
 Tail = require('tail').Tail;
 tail = new Tail(logfile);
-
+console.log(config.logfile);
 var dataBuffer;
 
 wsServer.on("connection", function (ws) {
