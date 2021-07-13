@@ -36,7 +36,8 @@ npm install tail
 	ProxyRequests off
 </VirtualHost>
 ```
-note: just put your exact domain name on the ServerName option
+NOTE: just put your exact domain name on the ServerName option, also this virtual host config is only for normal http so and will not work on https url but you may
+setup config for https if you like.
 
 5. For the logwatcher index.html file you can either create a virtual host for that or create a folder on your existing site and just make a soft link to it, assuming your public file is located in /public_html  then create a folder logwatcher on it then go inside that newly created folder logwatcher and make a system link file
 
