@@ -99,7 +99,7 @@ npm install pm2 -g
 ```
 2. Run logwatcher using pm2
 ```
-pm2 start node server.js
+pm2 start server.js
 ```
 
 ## How to use
