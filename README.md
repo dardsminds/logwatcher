@@ -45,14 +45,14 @@ setup config for https if you like.
 ln -s ../../logwatcher/index.html index.html
 ```
 
-6. Go to the main file of logwatcher and edit the server.js and change the logfile variable value and specify the path of your log file
+6. Go to the config folder and edit the config.dev.json and change the port or logfile variable value and specify the path of your log file
 
-*server.js*
+*/config/config.dev.json*
 ```
-var WebSocketServer = require("ws").Server;
-var wsServer = new WebSocketServer({port:3000});
-
-var logfile = "/var/log/httpd/error-log.log";
+{
+     "port": 3000,
+     "logfile": "/var/log/httpd/catalyst-error.log"
+}
 ...
 ```
 
