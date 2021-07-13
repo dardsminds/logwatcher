@@ -13,7 +13,6 @@ module.exports = function() {
 		config_data = require('./config/config.prod.json')
 	}}
 
-	config_data.connection_string = process.env.connection_string 
 	config_data.port = process.env.port || config_data.port
 	
 	return config_data
