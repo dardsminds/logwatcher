@@ -1,5 +1,5 @@
 {
 	"port": 3000,
-	"logfile": "/var/log/httpd/auth2demo-error.log",
+	"logfile": "/var/log/httpd/catalyst-error.log",
 	 "echoserver":"ws://cloud.mindworksoft.com:8087"
 }
