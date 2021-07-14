@@ -5,7 +5,8 @@
   <style>
 	html,
 	body {
-	height: 100%;
+		height: 100%;
+		background-color:rgb(187, 187, 187);
 	}	  
 	div.code {
 		white-space: pre;
@@ -18,10 +19,36 @@
 		overflow-y: scroll;
 	}
 	.error {
-		color:red;
+		color: white;
+		background-color:red;
+		padding: 2px;
 	}  
 	.success {
-		color:green;
+		color: white;
+		background-color:green;
+		padding: 2px;
+	}
+	.referer_tag {
+		display:block;
+		color: white;
+		background-color: hsl(22, 100%, 43%);
+		padding: 3px;
+		margin-bottom: 5px;
+	}
+	.toolbar { 
+		display: block;
+		width: 100%;
+		padding:3px;
+	}
+	.controls {
+		display: inline-block;
+		width: 70%;		
+	}
+	.status_display {
+		display: inline-block;
+		position: absolute;
+		right:0;
+		width: 10%;
 	}
   </style>
 
@@ -41,7 +68,11 @@
 			let logformat = extract_log_details(logdata);
 			let formated_data = n2br(logformat);
 			let logplaceholder = document.getElementById("server_messages");
-			
+
+			if( document.getElementById("clear_for_new_data").checked ) {
+				document.getElementById("server_messages").innerHTML="";
+			}
+
 			logplaceholder.insertAdjacentHTML('beforeend', "<br/>"+formated_data);
 		}
 
@@ -68,7 +99,14 @@
 		let log_details = arr1[1]; 
 
 		let string_index = data.indexOf(log_details); 
-        return data.substring(string_index);
+
+		let string_data = data.substring(string_index);
+		//extract the referer: url
+		let ar_referer = string_data.match(/referer:(.*)/g); 
+		let referer_url = '<div class="referer_tag">' + ar_referer[0] + '</div>';
+
+		let log_data = string_data.replace(/, referer:(.*)/g,'');
+        return referer_url + log_data;
     }  	
 
 	// convert all newline character to <br>
@@ -94,9 +132,15 @@
    </script>
  </head>
  <body>
+  <div class="toolbar">	 
+  <div class="controls">	 
   <button onClick="reload_data()">Reload</button>
-  <button onClick="clear_data()">Clear</button>	
-  <div id="ws_server_status"></div>
+  <button onClick="clear_data()">Clear</button>
+  <input type="checkbox" id="clear_for_new_data"> Auto-clear
+  </div>
+  <div id="ws_server_status" class="status_display"></div>
+  </div>
+
   <div id="server_messages" class="language-java code"></div> 
  </body>
 </html>
