@@ -15,7 +15,7 @@
 		color: #c7dfff;
 		background-color: rgb(49, 49, 49);
 		padding:5px;
-		height: 100%;
+		height: 93%;
 		overflow-y: scroll;
 	}
 	.error {
@@ -74,6 +74,8 @@
 			}
 
 			logplaceholder.insertAdjacentHTML('beforeend', "<br/>"+formated_data);
+			let placeholder_height = logplaceholder.scrollHeight; 
+			logplaceholder.scrollTo(0, placeholder_height);
 		}
 
 		ws.onerror = function(event) {
@@ -101,9 +103,12 @@
 		let string_index = data.indexOf(log_details); 
 
 		let string_data = data.substring(string_index);
+
+		let log_date = data.match(/(\[(.*?)\])/);
+
 		//extract the referer: url
 		let ar_referer = string_data.match(/referer:(.*)/g); 
-		let referer_url = '<div class="referer_tag">' + ar_referer[0] + '</div>';
+		let referer_url = '<div class="referer_tag">' + log_date[2] + ' | ' + ar_referer[0] + '</div>';
 
 		let log_data = string_data.replace(/, referer:(.*)/g,'');
         return referer_url + log_data;
