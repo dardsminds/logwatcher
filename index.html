@@ -29,9 +29,16 @@
 		padding: 2px;
 	}
 	.referer_tag {
-		display:block;
+		display:inline-block;
 		color: white;
 		background-color: hsl(22, 100%, 43%);
+		padding: 3px;
+		margin-bottom: 5px;
+	}
+	.content_tag {
+		display:inline-block;
+		color: white;
+		background-color: hsl(157, 100%, 29%);
 		padding: 3px;
 		margin-bottom: 5px;
 	}
@@ -64,8 +71,10 @@
 		};		
 
 		ws.onmessage = function(event) {
-			let logdata = event.data;
-			let logformat = extract_log_details(logdata);
+			let data = JSON.parse(event.data);
+
+			if ( data.type == "log" ) {
+			let logformat = extract_log_details(data.logdata);
 			let formated_data = n2br(logformat);
 			let logplaceholder = document.getElementById("server_messages");
 
@@ -76,6 +85,7 @@
 			logplaceholder.insertAdjacentHTML('beforeend', "<br/>"+formated_data);
 			let placeholder_height = logplaceholder.scrollHeight; 
 			logplaceholder.scrollTo(0, placeholder_height);
+			}
 		}
 
 		ws.onerror = function(event) {
@@ -106,9 +116,15 @@
 
 		let log_date = data.match(/(\[(.*?)\])/);
 
+		let tag_string = data.match(/(?=#).*?(?=\s)/);
+
+		let tag_display = (tag_string == null)
+			? ''
+			: '<div class="content_tag">' + tag_string[0] + '</div>';
+
 		//extract the referer: url
 		let ar_referer = string_data.match(/referer:(.*)/g); 
-		let referer_url = '<div class="referer_tag">' + log_date[2] + ' | ' + ar_referer[0] + '</div>';
+		let referer_url = tag_display + '<div class="referer_tag">' + log_date[2] + ' | ' + ar_referer[0] + '</div><br/>';
 
 		let log_data = string_data.replace(/, referer:(.*)/g,'');
         return referer_url + log_data;
