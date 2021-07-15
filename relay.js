@@ -17,8 +17,13 @@ var dataBuffer;
 
 tail.on("line", function(data) {
 
-	dataBuffer =  data;
-	ws.send(dataBuffer);
+	dataBuffer = {
+		logdata: data,
+		type: 'log'
+	};
+
+	ws.send(JSON.stringify(dataBuffer));	
+
 });
 
 tail.on("error", function(error) {
