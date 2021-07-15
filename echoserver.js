@@ -1,5 +1,7 @@
+var config = require("./config")();
+
 var WebSocketServer = require("ws").Server;
-var wsServer = new WebSocketServer({port:8087});
+var wsServer = new WebSocketServer({port:config.port});
 
 wsServer.on("connection", function (ws) {
 
@@ -11,3 +13,4 @@ wsServer.on("connection", function (ws) {
     });
 
 }); 
+ 
