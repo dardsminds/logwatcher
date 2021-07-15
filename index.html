@@ -54,8 +54,9 @@
 	.status_display {
 		display: inline-block;
 		position: absolute;
-		right:0;
-		width: 10%;
+		text-align: right;
+		right:7px;
+		width: 20%;
 	}
   </style>
 
@@ -118,13 +119,18 @@
 
 		let tag_string = data.match(/(?=#).*?(?=\s)/);
 
-		let tag_display = (tag_string == null)
-			? ''
-			: '<div class="content_tag">' + tag_string[0] + '</div>';
+		let ar_referer = string_data.match(/referer:(.*)/g); 
+
+		let referer_string = (ar_referer == null) ? "" : ar_referer[0];
+
+		let tag_display = "";
+		if (tag_string !== null) {
+			tag_display = '<div class="content_tag">' + tag_string[0] + '</div>';
+			string_data = string_data.replace(tag_string[0],'');
+		}
 
 		//extract the referer: url
-		let ar_referer = string_data.match(/referer:(.*)/g); 
-		let referer_url = tag_display + '<div class="referer_tag">' + log_date[2] + ' | ' + ar_referer[0] + '</div><br/>';
+		let referer_url = tag_display + '<div class="referer_tag">' + log_date[2] + ' | ' + referer_string + '</div><br/>';
 
 		let log_data = string_data.replace(/, referer:(.*)/g,'');
         return referer_url + log_data;
