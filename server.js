@@ -17,14 +17,18 @@ wsServer.on("connection", function (ws) {
 
         console.log("Received:", msg);
 		if (msg == "reload") {
-			ws.send(dataBuffer);
+			ws.send(JSON.stringify(dataBuffer));
 		}
     });
 
     tail.on("line", function(data) {
 
-		dataBuffer =  data;
-        ws.send(dataBuffer);
+		dataBuffer = {
+			logdata: data,
+			type: 'log'
+		};
+
+        ws.send(JSON.stringify(dataBuffer));
     });
 
 	tail.on("error", function(error) {
