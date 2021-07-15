@@ -3,6 +3,10 @@ A small server utility to display your selected log file on the website in real 
 
 ![logwatcher screen shot](https://github.com/dariominds/logwatcher/blob/main/logwatcher.png "logwatcher screen")
 
+The logwatcher's output on the picture above was came from the terminal below
+
+![Terminal screen shot](https://github.com/dariominds/logwatcher/blob/main/tail_output.png "Tail output screen")
+
 ## Requirements
 npm 3.10.10 or latest version
 
