@@ -65,7 +65,7 @@
 	var ws;
 
    function ws_connect() {
-		ws = new WebSocket("wss://websocket.dealereprocess.com");
+		ws = new WebSocket("wss://websocket.your-domain.com"); // <- had to replace this address with yours
 
 		ws.onopen = function() {
 			document.getElementById("ws_server_status").innerHTML = "<span class='success'>Connection established</span>";
