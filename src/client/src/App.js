@@ -1,29 +1,30 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import './style.css';
 
 const URL = 'wss://websocket.dealereprocess.com';
 
 function App() {
-	const [message, setMessage] = useState([]);
-	const [messages, setMessages] = useState([]);
-	const [ws, setWs] = useState(new WebSocket(URL))
+	const [ws, setWs] = useState(new WebSocket(URL));
+	const dataDisplay = useRef();
+	const serverStatusDisplay = useRef();
+	const clearForNewData = useRef();
 
 	useEffect(() => {
 		ws.onopen = () => {
-			document.getElementById("ws_server_status").innerHTML = "<span class='success'>Connection established</span>";
+			serverStatusDisplay.current.innerHTML = "<span class='success'>Connection established</span>";
 		}
 
 		ws.onmessage = (e) => {
 			const message = JSON.parse(e.data);
-			setMessages()
 
 			if ( message.type == "log" ) {
 				let logformat = extractLogDetails(message.logdata);
 				let formated_data = n2br(logformat);
-				let logplaceholder = document.getElementById("server_messages");
 
-				if( document.getElementById("clear_for_new_data").checked ) {
-					document.getElementById("server_messages").innerHTML="";
+				let logplaceholder = dataDisplay.current;
+
+				if( clearForNewData.current.checked ) {
+					clearData();
 				}
 
 				logplaceholder.insertAdjacentHTML('beforeend', "<br/>"+formated_data);
@@ -32,14 +33,22 @@ function App() {
 			}
 		}
 
+		ws.onclose = (e) => {
+			serverStatusDisplay.current.innerHTML = "<span class='error'>disconnected to server, reconnecting...</span>";
+			setTimeout(() => {
+				ws.close();
+				setWs(new WebSocket(URL));
+				console.log("reconnecting...");
+			}, 1000);
+		}
+
 		return () => {
 			ws.onclose = () => {
-				console.log('Websocket Disconnected');
-				setWs(new WebSocket(URL));
+				//setWs(new WebSocket(URL));
 			}
 		}
 
-	}, [ws.onmessage, ws.onopen, ws.onclose, messages]);
+	}, [ws.onmessage, ws.onopen, ws.onclose]);
 
 	/**
 	 * Reload the data from server that was previously loaded
@@ -51,7 +60,7 @@ function App() {
 	}
 
 	function clearData() {
-		document.getElementById("server_messages").innerHTML="";
+		dataDisplay.current.innerHTML = "";
 	}
 
 	/**
@@ -101,14 +110,14 @@ function App() {
 	return (
 		<>
 			<div className="toolbar">
-			<div className="controls">
-			<button onClick={reloadData}>Reload</button>
-			<button onClick={clearData}>Clear</button>
-			<input type="checkbox" id="clear_for_new_data" /> Auto-clear
+				<div className="controls">
+				<button onClick={reloadData}>Reload</button>
+				<button onClick={clearData}>Clear</button>
+				<input type="checkbox" ref={clearForNewData} /> Auto-clear
+				</div>
+				<div ref={serverStatusDisplay} className="status_display"></div>
 			</div>
-			<div id="ws_server_status" className="status_display"></div>
-			</div>
-			<div id="server_messages" className="data_display language-java code"></div>
+			<div ref={dataDisplay} className="data_display language-java code"></div>
 		</>
 	)
 
