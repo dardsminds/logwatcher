@@ -1,28 +1,33 @@
 import React, {useState, useRef, useEffect} from 'react';
 import './style.css';
 
-const URL = 'wss://websocket.dealereprocess.com';
-
 function App() {
-	const [ws, setWs] = useState(new WebSocket(URL));
-	const dataDisplay = useRef();
-	const serverStatusDisplay = useRef();
-	const clearForNewData = useRef();
 
-	useEffect(() => {
-		ws.onopen = () => {
+	const dataDisplay = useRef();
+	const clearForNewData = useRef();
+	const serverStatusDisplay = useRef();
+	const ws = useRef(null); // use the useRef so the ws can be access by other function
+	const URL = 'wss://websocket.dealereprocess.com';
+
+	/**
+	 * function to connect to websocket
+	 */
+	function connectToWebSocket() {
+
+		ws.current = new WebSocket(URL);
+
+		ws.current.onopen = () => {
 			serverStatusDisplay.current.innerHTML = "<span class='success'>Connection established</span>";
+			console.log("connection establish");
 		}
 
-		ws.onmessage = (e) => {
+		ws.current.onmessage = (e) => {
 			const message = JSON.parse(e.data);
 
 			if ( message.type == "log" ) {
 				let logformat = extractLogDetails(message.logdata);
 				let formated_data = n2br(logformat);
-
 				let logplaceholder = dataDisplay.current;
-
 				if( clearForNewData.current.checked ) {
 					clearData();
 				}
@@ -33,42 +38,41 @@ function App() {
 			}
 		}
 
-		ws.onclose = (e) => {
+		ws.current.onerror = (e) => {
+			console.log("Websocket eror: ", e);
+		}
+
+		ws.current.onclose = (e) => {
 			serverStatusDisplay.current.innerHTML = "<span class='error'>disconnected to server, reconnecting...</span>";
+
+			// in case of disconnection try to reconnect
 			setTimeout(() => {
-				ws.close();
-				setWs(new WebSocket(URL));
+				if (ws.current) {
+					ws.current.close();
+				}
 				console.log("reconnecting...");
+				connectToWebSocket();
 			}, 1000);
-		}
-
-		return () => {
-			ws.onclose = () => {
-				//setWs(new WebSocket(URL));
-			}
-		}
-
-	}, [ws.onmessage, ws.onopen, ws.onclose]);
-
-	/**
-	 * Reload the data from server that was previously loaded
-	 */
-	function reloadData() {
-		if (ws) {
-			ws.send("reload");
 		}
 	}
 
+	useEffect(() => {
+		connectToWebSocket()
+	}, []);
+
+	/**
+	 * Clear the content on dataDisplay
+	 */
 	function clearData() {
 		dataDisplay.current.innerHTML = "";
 	}
 
-	/**
-	 * Extract and format the data
-	 *
-	 * @param {*} data
-	 * @returns string
-	 */
+	// /**
+	//  * Extract and format the data
+	//  *
+	//  * @param {*} data
+	//  * @returns string
+	//  */
 	function extractLogDetails(data) {
 		let arr = data.match(/\[client(.*)\](.*)/);
 		if (!arr) return data;
@@ -107,6 +111,15 @@ function App() {
 		return data.replace(regex, '<br>')
 	}
 
+	/**
+	 * Reload the data from server that was previously loaded
+	 */
+	 function reloadData() {
+		if (ws.current) {
+			ws.current.send("reload");
+		}
+	}
+
 	return (
 		<>
 			<div className="toolbar">
@@ -119,7 +132,7 @@ function App() {
 			</div>
 			<div ref={dataDisplay} className="data_display language-java code"></div>
 		</>
-	)
+	);
 
 }
 
