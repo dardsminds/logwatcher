@@ -1,5 +1,5 @@
 {
      "port": 3000,
-     "logfile": "/var/log/httpd/catalyst-error.log"
+     "logfile": "/var/log/httpd/error_log"
 }
 
